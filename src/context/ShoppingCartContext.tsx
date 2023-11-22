@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useContext, useReducer, useState } from 'react';
 import { cartReducer } from '../reducer/reducer';
-import { CartItem } from '../components/CartItemModel';
-import { CartDataModel } from '../components/CartDataModel';
+import { CartItem } from '../interfaces/CartItemModel';
+import { CartDataModel } from '../interfaces/CartDataModel';
 import { ACTION_NAME } from '../actions/action-name';
 import { ShoppingCart } from '../components/ShoppingCart';
 import { FetchData } from '../data/FetchData';

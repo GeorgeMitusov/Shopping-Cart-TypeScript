@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import { formatPrice } from "../utilities/formatPrice";
-import { CartDataModel } from "../components/CartDataModel";
+import { CartDataModel } from "../interfaces/CartDataModel";
 import { Tooltip, OverlayTrigger, Button, Collapse, Card } from 'react-bootstrap';
 import { InfoCircle } from 'react-bootstrap-icons';
 import { StarRating } from "./StarRating";
@@ -34,12 +34,6 @@ export function StoreItem({ id, title, description, price, image, rating } : Car
       const shortTitle = words.slice(0, 3).join(' ');
       return (
         <>
-          {/* <span className="fs-3"> {shortTitle}... </span>
-          <OverlayTrigger placement="top" overlay={tooltip}>
-            <span style={{ cursor: 'pointer' }}>
-              <InfoCircle size={16} color="blue" />
-            </span>
-          </OverlayTrigger> */}
           <OverlayTrigger placement="top" overlay={titleTooltip}>
             <span className="fs-3" style={{ cursor: 'pointer' }}>
               {shortTitle}...

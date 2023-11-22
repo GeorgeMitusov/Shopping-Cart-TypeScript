@@ -1,4 +1,4 @@
-import { CartItem } from '../components/CartItemModel';
+import { CartItem } from '../interfaces/CartItemModel';
 import { Actions } from '../actions/actions';
 import { ACTION_NAME } from '../actions/action-name';
 

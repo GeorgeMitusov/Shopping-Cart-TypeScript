@@ -10,7 +10,7 @@ interface ShoppingCartProps {
 
 export function ShoppingCart({ isOpen } : ShoppingCartProps) {
 
-  const { closeCart, cartItems } = useShoppingCart();
+  const { closeCart, cartItems, cartData } = useShoppingCart();
 
   return (
     <Offcanvas 
@@ -33,7 +33,7 @@ export function ShoppingCart({ isOpen } : ShoppingCartProps) {
             Total {" "}
             { formatPrice(
               cartItems.reduce(( total, cartItem) => {
-                const item = storeItems.find( item => item.id === cartItem.id);
+                const item = cartData.find( item => item.id === cartItem.id);
                 return total + ( item?.price || 0 ) * cartItem.quantity
               }, 0) 
             )}
