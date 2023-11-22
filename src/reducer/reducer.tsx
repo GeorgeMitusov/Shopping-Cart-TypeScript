@@ -1,6 +1,6 @@
 import { CartItem } from '../components/CartItemModel';
 import { Actions } from '../actions/actions';
-import { ACTION_NAME } from '../actions/actions';
+import { ACTION_NAME } from '../actions/action-name';
 
 export const cartReducer = ( state: CartItem[], action: Actions ): CartItem[] => {
   

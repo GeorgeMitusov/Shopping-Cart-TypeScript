@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useContext, useReducer, useState } from 'react';
 import { cartReducer } from '../reducer/reducer';
 import { CartItem } from '../components/CartItemModel';
-import { ACTION_NAME } from '../actions/actions';
+import { ACTION_NAME } from '../actions/action-name';
 import { ShoppingCart } from '../components/ShoppingCart';
 
 type ShoppingCartProviderProps = {
@@ -32,7 +32,6 @@ export function ShoppingCartProvider({ children } : ShoppingCartProviderProps) {
   const [ isOpen, setIsOpen ] = useState<boolean>(false);
 
   const { INCREASE_QUANTITY, DECREASE_QUANTITY, REMOVE_FROM_CART } = ACTION_NAME;
-
 
   function getItemQuantity(id: number) {
     return cartItems.find( item => item.id === id)?.quantity || 0;
