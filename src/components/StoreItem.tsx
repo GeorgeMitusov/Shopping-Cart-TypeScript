@@ -12,7 +12,8 @@ interface StoreItemProps {
 
 export function StoreItem({ id, name, price, imgUrl } : StoreItemProps ) {
 
-  const { getItemQuantity, increaseCartQuantity,
+
+  const { getItemQuantity, increaseCartQuantity, 
     decreaseCartQuantity, removeFromCart } = useShoppingCart();
 
   const quantity = getItemQuantity(id);
