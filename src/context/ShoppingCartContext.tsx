@@ -1,17 +1,23 @@
-import React, { createContext, ReactNode, useContext, useReducer } from 'react';
+import React, { createContext, ReactNode, useContext, useReducer, useState } from 'react';
 import { cartReducer } from '../reducer/reducer';
 import { CartItem } from '../components/CartItemModel';
 import { ACTION_NAME } from '../actions/actions';
+import { ShoppingCart } from '../components/ShoppingCart';
 
 type ShoppingCartProviderProps = {
   children: ReactNode
 }
 
 type ShoppingCartContext = {
+  openCart: () => void
+  closeCart: () => void
   getItemQuantity: (id:number) => number
   increaseCartQuantity: (id:number) => void
   decreaseCartQuantity: (id:number) => void
   removeFromCart: (id:number) => void
+  cartQuantity: number
+  isOpen: boolean
+  cartItems: CartItem[]
 }
 
 const ShoppingCartContex = createContext({} as ShoppingCartContext);
@@ -23,7 +29,7 @@ export function useShoppingCart() {
 export function ShoppingCartProvider({ children } : ShoppingCartProviderProps) {
 
   const [ cartItems, dispatch ] = useReducer(cartReducer, [] as CartItem[]);
-
+  const [ isOpen, setIsOpen ] = useState<boolean>(false);
 
   const { INCREASE_QUANTITY, DECREASE_QUANTITY, REMOVE_FROM_CART } = ACTION_NAME;
 
@@ -43,6 +49,12 @@ export function ShoppingCartProvider({ children } : ShoppingCartProviderProps) {
   function removeFromCart(id: number) {
     dispatch({ type: REMOVE_FROM_CART, payload: id })
   }
+
+  const openCart = () => setIsOpen(true);
+
+  const closeCart = () => setIsOpen(false);
+  
+  const cartQuantity = cartItems.reduce(( quantity, item ) => item.quantity + quantity, 0)
   
   return (
     <ShoppingCartContex.Provider 
@@ -50,10 +62,14 @@ export function ShoppingCartProvider({ children } : ShoppingCartProviderProps) {
         getItemQuantity,
         increaseCartQuantity,
         decreaseCartQuantity,
-        removeFromCart
+        removeFromCart,
+        cartQuantity,
+        openCart, closeCart,
+        isOpen, cartItems
       }}
     >
       { children }
+      <ShoppingCart isOpen={isOpen} />
     </ShoppingCartContex.Provider>
   )
 }

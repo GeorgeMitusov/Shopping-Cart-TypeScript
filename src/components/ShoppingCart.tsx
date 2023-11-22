@@ -11,15 +11,13 @@ interface ShoppingCartProps {
 
 export function ShoppingCart({ isOpen } : ShoppingCartProps) {
 
-  // const { closeCart, cartItems } = useShoppingCart();
+  const { closeCart, cartItems } = useShoppingCart();
 
   return (
     <Offcanvas 
-      show='true' 
-      // show={isOpen} 
+      show={isOpen} 
       placement="end" 
-      onHide='true'
-      // onHide={closeCart}
+      onHide={closeCart}
     >
 
       <Offcanvas.Header closeButton>
