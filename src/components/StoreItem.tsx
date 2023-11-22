@@ -2,15 +2,10 @@ import React from "react";
 import { Button, Card } from "react-bootstrap";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import { formatPrice } from "../utilities/formatPrice";
+import { CartDataModel } from "../components/CartDataModel";
 
-interface StoreItemProps {
-  id: number
-  name: string
-  price: number
-  imgUrl: string
-}
 
-export function StoreItem({ id, name, price, imgUrl } : StoreItemProps ) {
+export function StoreItem({ id, title, description, price, image, rating } : CartDataModel ) {
 
   const { getItemQuantity, increaseCartQuantity, 
     decreaseCartQuantity, removeFromCart } = useShoppingCart();
@@ -21,15 +16,15 @@ export function StoreItem({ id, name, price, imgUrl } : StoreItemProps ) {
     <Card className="h-100">
       <Card.Img
         variant="top"
-        src={imgUrl}
-        height="200px"
+        src={image}
+        height="250px"
         style={{ objectFit: "cover" }}
       />
       <Card.Body className="d-flex flex-column">
         <Card.Title
           className="d-flex justify-content-between align-items-baseline mb-4"
         >
-          <span className="fs-2"> {name} </span>
+          <span className="fs-3"> {title.slice(0, 20)} </span>
           <span className="ms-2 text-muted"> {formatPrice(price)} </span>
         </Card.Title>
         <div className="mt-auto">
