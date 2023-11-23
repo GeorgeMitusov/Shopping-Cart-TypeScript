@@ -18,14 +18,21 @@ type ShoppingCartContext = {
   decreaseCartQuantity: (id:number) => void
   removeFromCart: (id:number) => void
   toggleTheme: () => void
+  toggleSeacrh: () => void
   cartQuantity: number
   isOpen: boolean
   isLoading: boolean
+  isSearch: boolean
   darkMode: boolean
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
   cartItems: CartItem[]
   cartData: CartDataModel[]
   setCartData: React.Dispatch<React.SetStateAction<CartDataModel[]>>;
+  searchValue: string
+  setSearchValue: React.Dispatch<React.SetStateAction<string>>
+  searchData: CartDataModel[]
+  setSearchData: React.Dispatch<React.SetStateAction<CartDataModel[]>>;
+  searchFilter: CartDataModel[]
 }
 
 const ShoppingCartContex = createContext({} as ShoppingCartContext);
@@ -38,9 +45,13 @@ export function ShoppingCartProvider({ children } : ShoppingCartProviderProps) {
 
   const [ cartItems, dispatch ] = useReducer(cartReducer, [] as CartItem[]);
   const [ cartData, setCartData ] = useState<CartDataModel[]>([]);
+  const [ searchData, setSearchData ] = useState<CartDataModel[]>([]);
   const [ isOpen, setIsOpen ] = useState<boolean>(false);
   const [ isLoading, setIsLoading ] = useState<boolean>(false);
   const [ darkMode, setDarkMode ] = useState<boolean>(false);
+  const [ isSearch, setIsSearch ] = useState<boolean>(false);
+  const [ searchValue, setSearchValue ] = useState<string>('');
+
 
   const { INCREASE_QUANTITY, DECREASE_QUANTITY, REMOVE_FROM_CART } = ACTION_NAME;
 
@@ -60,15 +71,19 @@ export function ShoppingCartProvider({ children } : ShoppingCartProviderProps) {
     dispatch({ type: REMOVE_FROM_CART, payload: id })
   }
 
+  const searchFilter = cartData.filter((item) =>
+    item.title.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   const openCart = () => setIsOpen(true);
 
   const closeCart = () => setIsOpen(false);
   
   const cartQuantity = cartItems.reduce(( quantity, item ) => item.quantity + quantity, 0)
 
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
-  };
+  const toggleTheme = () => setDarkMode(!darkMode);
+
+  const toggleSeacrh = () => setIsSearch(!isSearch);
   
   return (
     <ShoppingCartContex.Provider 
@@ -77,12 +92,15 @@ export function ShoppingCartProvider({ children } : ShoppingCartProviderProps) {
         increaseCartQuantity,
         decreaseCartQuantity,
         removeFromCart,
-        cartQuantity,
+        cartQuantity, isSearch,
         openCart, closeCart,
         isOpen, cartItems,
         cartData, setCartData,
         isLoading, setIsLoading,
-        toggleTheme, darkMode
+        toggleTheme, darkMode,
+        toggleSeacrh, searchValue,
+        setSearchValue, searchData,
+        setSearchData, searchFilter
       }}
     >
       { children }

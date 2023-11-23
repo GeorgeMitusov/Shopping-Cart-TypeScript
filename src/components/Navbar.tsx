@@ -2,11 +2,13 @@ import React from 'react';
 import { Container, Nav, Navbar as NavbarBs, Button } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { useShoppingCart } from '../context/ShoppingCartContext';
-import { Sun, Moon } from 'react-bootstrap-icons';
+import { Sun, Moon, Search } from 'react-bootstrap-icons';
+import { SearchBar } from './SearchBar';
 
 export function Navbar() {
 
-  const { openCart, cartQuantity, toggleTheme, darkMode } = useShoppingCart();
+  const { openCart, cartQuantity, toggleTheme, 
+    darkMode, isSearch, toggleSeacrh } = useShoppingCart();
 
   return (
     <NavbarBs sticky="top" className={`bg-${darkMode ? 'dark' : 'white'} shadow-sm mb-3`}> 
@@ -16,6 +18,12 @@ export function Navbar() {
           <Nav.Link className={`${darkMode ? 'text-light' : 'text-dark' }`} to="/store" as={NavLink}> Store </Nav.Link>
           <Nav.Link className={`${darkMode ? 'text-light' : 'text-dark' }`} to="/about" as={NavLink}> About </Nav.Link>
         </Nav>
+
+        { isSearch && <SearchBar /> }
+
+        <Button className='me-5' variant="outline-info" onClick={toggleSeacrh}> 
+          <Search size={16} /> 
+        </Button>
 
         { cartQuantity > 0 && (
           <Button 
@@ -52,8 +60,7 @@ export function Navbar() {
           className='ms-5' 
           variant={`${darkMode ? "light" : "outline-dark"}`}
           onClick={toggleTheme}
-        > { darkMode ? <Sun size={16} color="#000" /> : <Moon size={16} color="#000" /> } </Button>
-
+        > { darkMode ? <Sun size={16} /> : <Moon size={16} /> } </Button>
       </Container>
     </NavbarBs>
   )
