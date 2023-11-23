@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Nav, Navbar as NavbarBs, Button } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useShoppingCart } from '../context/ShoppingCartContext';
 import { Sun, Moon, Search } from 'react-bootstrap-icons';
 import { SearchBar } from './SearchBar';
@@ -8,7 +8,11 @@ import { SearchBar } from './SearchBar';
 export function Navbar() {
 
   const { openCart, cartQuantity, toggleTheme, 
-    darkMode, isSearch, toggleSeacrh } = useShoppingCart();
+    darkMode, isSearch, toggleSearch } = useShoppingCart();
+
+  const location = useLocation();
+
+  const showButton = location.pathname === '/store';
 
   return (
     <NavbarBs sticky="top" className={`bg-${darkMode ? 'dark' : 'white'} shadow-sm mb-3`}> 
@@ -21,9 +25,11 @@ export function Navbar() {
 
         { isSearch && <SearchBar /> }
 
-        <Button className='me-5' variant="outline-info" onClick={toggleSeacrh}> 
-          <Search size={16} /> 
-        </Button>
+        { showButton && (
+          <Button className='me-5' variant="outline-info" onClick={toggleSearch}> 
+            <Search size={16} /> 
+          </Button>
+        )}
 
         { cartQuantity > 0 && (
           <Button 

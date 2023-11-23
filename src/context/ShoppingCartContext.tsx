@@ -1,10 +1,11 @@
-import React, { createContext, ReactNode, useContext, useReducer, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useReducer, useState, useEffect } from 'react';
 import { cartReducer } from '../reducer/reducer';
 import { CartItem } from '../interfaces/CartItemModel';
 import { CartDataModel } from '../interfaces/CartDataModel';
 import { ACTION_NAME } from '../actions/action-name';
 import { ShoppingCart } from '../components/ShoppingCart';
 import { FetchData } from '../data/FetchData';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 type ShoppingCartProviderProps = {
   children: ReactNode
@@ -18,7 +19,7 @@ type ShoppingCartContext = {
   decreaseCartQuantity: (id:number) => void
   removeFromCart: (id:number) => void
   toggleTheme: () => void
-  toggleSeacrh: () => void
+  toggleSearch: () => void
   cartQuantity: number
   isOpen: boolean
   isLoading: boolean
@@ -26,6 +27,7 @@ type ShoppingCartContext = {
   darkMode: boolean
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
   cartItems: CartItem[]
+  items: CartItem[]
   cartData: CartDataModel[]
   setCartData: React.Dispatch<React.SetStateAction<CartDataModel[]>>;
   searchValue: string
@@ -43,20 +45,20 @@ export function useShoppingCart() {
 
 export function ShoppingCartProvider({ children } : ShoppingCartProviderProps) {
 
-  const [ cartItems, dispatch ] = useReducer(cartReducer, [] as CartItem[]);
+  const [ cartItems, setCartItems ] = useLocalStorage<CartItem[]>('shopping-cart', [] as CartItem[]);
   const [ cartData, setCartData ] = useState<CartDataModel[]>([]);
   const [ searchData, setSearchData ] = useState<CartDataModel[]>([]);
   const [ isOpen, setIsOpen ] = useState<boolean>(false);
   const [ isLoading, setIsLoading ] = useState<boolean>(false);
-  const [ darkMode, setDarkMode ] = useState<boolean>(false);
+  const [ darkMode, setDarkMode ] = useLocalStorage<boolean>('dark-mode', false);
   const [ isSearch, setIsSearch ] = useState<boolean>(false);
   const [ searchValue, setSearchValue ] = useState<string>('');
-
+  const [ items, dispatch ] = useReducer(cartReducer, cartItems);
 
   const { INCREASE_QUANTITY, DECREASE_QUANTITY, REMOVE_FROM_CART } = ACTION_NAME;
 
   function getItemQuantity(id: number) {
-    return cartItems.find( item => item.id === id)?.quantity || 0;
+    return items.find( item => item.id === id)?.quantity || 0;
   }
 
   function increaseCartQuantity(id: number) {
@@ -79,11 +81,15 @@ export function ShoppingCartProvider({ children } : ShoppingCartProviderProps) {
 
   const closeCart = () => setIsOpen(false);
   
-  const cartQuantity = cartItems.reduce(( quantity, item ) => item.quantity + quantity, 0)
+  const cartQuantity = items.reduce(( quantity, item ) => item.quantity + quantity, 0)
 
   const toggleTheme = () => setDarkMode(!darkMode);
 
-  const toggleSeacrh = () => setIsSearch(!isSearch);
+  const toggleSearch = () => setIsSearch(!isSearch);
+
+  useEffect(() => {
+    localStorage.setItem('shopping-cart', JSON.stringify(items));
+  }, [items]);
   
   return (
     <ShoppingCartContex.Provider 
@@ -91,14 +97,14 @@ export function ShoppingCartProvider({ children } : ShoppingCartProviderProps) {
         getItemQuantity,
         increaseCartQuantity,
         decreaseCartQuantity,
-        removeFromCart,
+        removeFromCart, items,
         cartQuantity, isSearch,
         openCart, closeCart,
         isOpen, cartItems,
         cartData, setCartData,
         isLoading, setIsLoading,
         toggleTheme, darkMode,
-        toggleSeacrh, searchValue,
+        toggleSearch, searchValue,
         setSearchValue, searchData,
         setSearchData, searchFilter
       }}
