@@ -17,9 +17,11 @@ type ShoppingCartContext = {
   increaseCartQuantity: (id:number) => void
   decreaseCartQuantity: (id:number) => void
   removeFromCart: (id:number) => void
+  toggleTheme: () => void
   cartQuantity: number
   isOpen: boolean
   isLoading: boolean
+  darkMode: boolean
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
   cartItems: CartItem[]
   cartData: CartDataModel[]
@@ -38,6 +40,7 @@ export function ShoppingCartProvider({ children } : ShoppingCartProviderProps) {
   const [ cartData, setCartData ] = useState<CartDataModel[]>([]);
   const [ isOpen, setIsOpen ] = useState<boolean>(false);
   const [ isLoading, setIsLoading ] = useState<boolean>(false);
+  const [ darkMode, setDarkMode ] = useState<boolean>(false);
 
   const { INCREASE_QUANTITY, DECREASE_QUANTITY, REMOVE_FROM_CART } = ACTION_NAME;
 
@@ -62,6 +65,10 @@ export function ShoppingCartProvider({ children } : ShoppingCartProviderProps) {
   const closeCart = () => setIsOpen(false);
   
   const cartQuantity = cartItems.reduce(( quantity, item ) => item.quantity + quantity, 0)
+
+  const toggleTheme = () => {
+    setDarkMode(!darkMode);
+  };
   
   return (
     <ShoppingCartContex.Provider 
@@ -74,7 +81,8 @@ export function ShoppingCartProvider({ children } : ShoppingCartProviderProps) {
         openCart, closeCart,
         isOpen, cartItems,
         cartData, setCartData,
-        isLoading, setIsLoading 
+        isLoading, setIsLoading,
+        toggleTheme, darkMode
       }}
     >
       { children }

@@ -2,18 +2,19 @@ import React from 'react';
 import { Container, Nav, Navbar as NavbarBs, Button } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { useShoppingCart } from '../context/ShoppingCartContext';
+import { Sun, Moon } from 'react-bootstrap-icons';
 
 export function Navbar() {
 
-  const { openCart, cartQuantity } = useShoppingCart();
+  const { openCart, cartQuantity, toggleTheme, darkMode } = useShoppingCart();
 
   return (
-    <NavbarBs sticky="top" className='bg-white shadow-sm mb-3'> 
+    <NavbarBs sticky="top" className={`bg-${darkMode ? 'dark' : 'white'} shadow-sm mb-3`}> 
       <Container>
         <Nav className='me-auto'>
-          <Nav.Link to="/" as={NavLink}> Home </Nav.Link>
-          <Nav.Link to="/store" as={NavLink}> Store </Nav.Link>
-          <Nav.Link to="/about" as={NavLink}> About </Nav.Link>
+          <Nav.Link className={`${darkMode ? 'text-light' : 'text-dark' }`} to="/" as={NavLink}> Home </Nav.Link>
+          <Nav.Link className={`${darkMode ? 'text-light' : 'text-dark' }`} to="/store" as={NavLink}> Store </Nav.Link>
+          <Nav.Link className={`${darkMode ? 'text-light' : 'text-dark' }`} to="/about" as={NavLink}> About </Nav.Link>
         </Nav>
 
         { cartQuantity > 0 && (
@@ -46,6 +47,12 @@ export function Navbar() {
 
           </Button>
         )}
+
+        <Button
+          className='ms-5' 
+          variant={`${darkMode ? "light" : "outline-dark"}`}
+          onClick={toggleTheme}
+        > { darkMode ? <Sun size={16} color="#000" /> : <Moon size={16} color="#000" /> } </Button>
 
       </Container>
     </NavbarBs>

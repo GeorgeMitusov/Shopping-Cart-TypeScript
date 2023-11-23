@@ -10,25 +10,30 @@ interface ShoppingCartProps {
 
 export function ShoppingCart({ isOpen } : ShoppingCartProps) {
 
-  const { closeCart, cartItems, cartData } = useShoppingCart();
+  const { closeCart, cartItems, cartData, darkMode } = useShoppingCart();
 
   return (
     <Offcanvas 
       show={isOpen} 
       placement="end" 
       onHide={closeCart}
+      className={`
+        bg-${darkMode ? 'dark' : 'white'}
+        ${darkMode ? 'text-light' : 'text-dark'}
+      `}
     >
       <Offcanvas.Header closeButton>
         <Offcanvas.Title> Cart </Offcanvas.Title>
       </Offcanvas.Header>
 
       <Offcanvas.Body>
+
         <Stack gap={3}>
-          {
-            cartItems.map( item => (
-              <CartItem key={item.id} {...item} />
-            ))
-          }
+          { cartItems.length === 0 ? (<h3 className="text-muted"> Cart is empty. </h3>) : (
+              cartItems.map( item => (
+                <CartItem key={item.id} {...item} />
+              ))
+          )}
           <div className="ms-auto fw-bold fs-5">
             Total {" "}
             { formatPrice(

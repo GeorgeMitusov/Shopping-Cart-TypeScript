@@ -1,0 +1,11 @@
+1. dark mode
+2. images on load spinner
+3. search 
+
+
+
+
+
+
+
+

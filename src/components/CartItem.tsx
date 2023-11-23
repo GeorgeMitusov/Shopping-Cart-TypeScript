@@ -6,7 +6,7 @@ import { CartItem as CartItemProps } from '../interfaces/CartItemModel';
 
 export function CartItem({ id, quantity } : CartItemProps) {
 
-  const { removeFromCart, cartData, 
+  const { removeFromCart, cartData, darkMode,  
     decreaseCartQuantity, increaseCartQuantity } = useShoppingCart();
 
   const item = cartData.find( item => item.id === id );
@@ -16,10 +16,14 @@ export function CartItem({ id, quantity } : CartItemProps) {
     const words = item?.title.split(" ");
     const shortTitle = words?.slice(0, 2).join(' ');
     return shortTitle;
-  }  
+  }
+  
+  const cartItemClassName = darkMode ? (
+    "d-flex align-items-center bg-light text-dark rounded p-1"
+    ) : "d-flex align-items-center rounded"
 
   return (
-    <Stack direction="horizontal" gap={2} className="d-flex align-items-center"> 
+    <Stack direction="horizontal" gap={2} className={cartItemClassName}> 
       <img 
         src={item.image}
         style={{ width: '125px', height: '75px', objectFit: 'contain' }}

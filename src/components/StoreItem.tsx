@@ -59,7 +59,7 @@ export function StoreItem({ id, title, description, price, image, rating } : Car
       <Card.Img
         variant="top"
         src={image}
-        className="rounded"
+        className="rounded mt-4"
         height="250px"
         style={{ objectFit: "contain" }}
       />
